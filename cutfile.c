@@ -54,16 +54,14 @@ int main(int argc, char *argv[]) {
         return 3; /* nem paraméterezték jól */
     }
 
-    int state = 0; /* feltételezem, hogy lesz találat */
     unsigned char *ss, *st, *sub1, *sub2; /* mutatók definiálása */
-
     /* fájl tartalmának teljes beolvasása memóriába */
     ss = read_whole_file(argv[1]);
     st = read_whole_file(argv[2]);
+    int state = 0; /* feltételezem, hogy lesz találat */
 
     /* ss-ben megkeresi az első pontos előfordulását st-nek és a memóriacímét sub1-be teszi, így a mutató a szöveg elejét nem tartalmazza */
     sub1 = strstr(ss, st);
-
     /* ha talált: a pontos találat feltétele, hogy a talált karakter az első karakter legyen, vagy a talált karakter előtt új sor legyen */
     while (sub1 != NULL && !(*ss == *sub1 || sub1[-1] == '\n')) {
         sub1 = strstr(sub1 + 1, st);
