@@ -70,19 +70,20 @@ rewrite_whole_file(const char *file_name, const char *text) {
 
 int main(int argc, char *argv[]) {
     int argf = 1, state = 2; /* feltételezem, hogy csak a 2 fájl paraméter van megadva, és nem lesz találat */
-    bool fast = false, verb = false; /* alapértelmezett érték definiálása */
+    bool add = false, fast = false, verb = false; /* alapértelmezett érték definiálása */
 
     /* ha meg lettek adva paraméterek, alapértelmezettek felüldefiniálása */
-    if (argc > 1 && !strcmp(argv[1], "-f")) fast = true;
-    if (argc > 1 && !strcmp(argv[1], "-v")) verb = true;
-    if (argc > 2 && !strcmp(argv[2], "-f")) fast = true;
-    if (argc > 2 && !strcmp(argv[2], "-v")) verb = true;
+    if (argc > 2) {
+        if (!strcmp(argv[1], "-f") || !strcmp(argv[2], "-f")) fast = true;
+        if (!strcmp(argv[1], "-v") || !strcmp(argv[2], "-v")) verb = true;
+        if (!strcmp(argv[1], "-a") || !strcmp(argv[2], "-a")) add = true;
+    }
 
-    if (fast && verb) argf = 3; /* ha mindkét paramétert megadták, 3-mas indexben van a forrás fájl */
-    if ((fast && !verb) || (!fast && verb)) argf = 2; /* ha csak egy paramétert adtak meg, 2-es indexben van a forrás fájl */
+    if ((fast || add) && verb) argf = 3; /* ha mindkét paramétert megadták, 3-mas indexben van a forrás fájl */
+    if (((fast || add) && !verb) || (!(fast || add) && verb)) argf = 2; /* ha csak egy paramétert adtak meg, 2-es indexben van a forrás fájl */
 
     if (argc != argf + 2) { /* ha nem paraméterezték jól, súgó megjelenítése és kilépés */
-        fprintf(stderr, "Usage: [-v] [-f] source_file target_file\n\nOptions:\n -f  Remove only the first occurrence.\n -v  Print instead write back.\n\nExit codes:\n  0  There are occurrences.\n  1  There is an error like file not exists.\n  2  There is any occurrence.\n  3  This message appeared.\n");
+        fprintf(stderr, "Usage: [-a] [-f] [-v] source_file target_file\n\nOptions:\n -a  Add content of target file to end of\n     source file if there is any occurrence.\n     In this case you can not use parameter -f.\n -f  Remove only the first occurrence.\n -v  Print instead write back.\n\nExit codes:\n  0  There are occurrences.\n  1  There is an error like file not exists.\n  2  There is any occurrence.\n  3  This message appeared.\n");
         return 3;
     }
 
@@ -100,22 +101,32 @@ int main(int argc, char *argv[]) {
             sub1 = strstr(sub1 + 1, st);
         }
 
-        if (sub1) { /* ha van memóriacím, tehát van találat */
+        if (sub1 && !add) { /* ha van memóriacím (tehát van találat) és nem hozzáadást kértek */
             state = 0; /* állapotkód OK-ra állítása jelezve, hogy volt minimum egy találat */
             /* az [első előfordulás után] + [keresett szöveg mérete] címmel arrébb lévő memóriacím sub2-be kerül, így a string végét kapjuk */
             sub2 = strstr(sub1 + 1, sub1 + strlen(st));
             /* a keresett szöveg helyére a string végét teszi plusz a string vége jelet is bele veszi (ezért van + 1 index növelés) */
             strncpy(sub1, sub1 + strlen(st), strlen(sub2) + 1);
-            if (fast) break; /* ha gyorskeresést kértek, ciklusból kilépés, hogy több előfordulást ne keressen és ne vágjon */
         }
-    } while (sub1 != NULL);
+        else if (!sub1 && add) { /* ha nincs találat és hozzáadást kértek */
+            ss = realloc(ss, strlen(ss) + strlen(st) + 1); /* összefűzés előtt memória foglalás */
+            if (ss == NULL) { /* ha nem sikerült a memória lefoglalása */
+                state = EXIT_FAILURE; /* hiba jelzése */
+                fprintf(stderr, "Not enough memory.\n");
+            }
+            else { /* ha sikerült a memória lefoglalása */
+                state = 0; /* állapotkód OK-ra állítása jelezve, hogy megtörtént a hozzáadás */
+                strcat(ss, st);
+            }
+        }
+    } while (sub1 != NULL && strlen(ss) > 0 && !(fast || add)); /* ha nincs több találat vagy üres a fájl vagy gyorskeresés ill. hozzáadást kértek, kilépés */
 
     if (verb) { /* ha a kimenetre kérik a feldolgozott tartalmat */
         /* megy a stdout kimenetre a feldolgozott tartalom */
         printf("%s", ss);
         fflush(stdout);
     }
-    else {
+    else if (state == 0) { /* ha fájlba kérik és megváltozott a tartalom */
         /* megy vissza a forrás fájlba a feldolgozott tartalom */
         rewrite_whole_file(argv[argf], ss);
     }
