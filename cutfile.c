@@ -36,7 +36,10 @@ static unsigned char *read_whole_file(const char *file_name) {
         exit(EXIT_FAILURE);
     }
     bytes_read = fread(contents, sizeof(unsigned char), s, f);
-    if (bytes_read != s) {
+    if (bytes_read < s) {
+        contents[bytes_read] = '\0';
+    }
+    else if (bytes_read > s) {
         fprintf(stderr, "Short read of %s: expected %d bytes but got %d: %s.\n", file_name, s, bytes_read, strerror(errno));
         exit(EXIT_FAILURE);
     }
@@ -54,7 +57,7 @@ int main(int argc, char *argv[]) {
     if (argc > 1 && !strcmp(argv[1], "-f")) fast = true;
 
     if ((!fast && argc != 3) || (fast && argc != 4)) { /* ha nem paraméterezték jól, súgó megjelenítése és kilépés */
-        fprintf(stderr, "Usage: [-f] source_file target_file\nBy specifying -f optional parameter, the program removes only the first occurrence.\nExit codes:\n0 - There are occurrences.\n1 - There is an error like file not exists.\n2 - There is any occurrence.\n3 - This message appeared.\n");
+        fprintf(stderr, "Usage: [-f] source_file target_file\n\nBy specifying -f optional parameter,\nthe program removes only the first occurrence.\n\nExit codes:\n0 - There are occurrences.\n1 - There is an error like file not exists.\n2 - There is any occurrence.\n3 - This message appeared.\n");
         return 3;
     }
 
