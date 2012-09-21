@@ -48,22 +48,49 @@ static unsigned char *read_whole_file(const char *file_name) {
     return contents;
 }
 
+/* a megadott szöveget a megadott fájlba írja */
+rewrite_whole_file(const char *file_name, const char *text) {
+    FILE *f;
+    f = fopen(file_name, "w");
+    if (f != NULL) {
+        if (fputs(text, f) == EOF) {
+            fprintf(stderr, "Could not write to %s: %s.\n", file_name, strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+        if (fclose(f) != 0) {
+            fprintf (stderr, "Error closing %s: %s.\n", file_name, strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+    }
+    else {
+        fprintf(stderr, "Could not open %s to write: %s.\n", file_name, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+}
+
 int main(int argc, char *argv[]) {
+    int argf = 1, state = 2; /* feltételezem, hogy csak a 2 fájl paraméter van megadva, és nem lesz találat */
+    bool fast = false, verb = false; /* alapértelmezett érték definiálása */
 
-    bool fast = false;
+    /* ha meg lettek adva paraméterek, alapértelmezettek felüldefiniálása */
     if (argc > 1 && !strcmp(argv[1], "-f")) fast = true;
+    if (argc > 1 && !strcmp(argv[1], "-v")) verb = true;
+    if (argc > 2 && !strcmp(argv[2], "-f")) fast = true;
+    if (argc > 2 && !strcmp(argv[2], "-v")) verb = true;
 
-    if ((!fast && argc != 3) || (fast && argc != 4)) { /* ha nem paraméterezték jól, súgó megjelenítése és kilépés */
-        fprintf(stderr, "Usage: [-f] source_file target_file\n\nBy specifying -f optional parameter,\nthe program removes only the first occurrence.\n\nExit codes:\n0 - There are occurrences.\n1 - There is an error like file not exists.\n2 - There is any occurrence.\n3 - This message appeared.\n");
+    if (fast && verb) argf = 3; /* ha mindkét paramétert megadták, 3-mas indexben van a forrás fájl */
+    if ((fast && !verb) || (!fast && verb)) argf = 2; /* ha csak egy paramétert adtak meg, 2-es indexben van a forrás fájl */
+
+    if (argc != argf + 2) { /* ha nem paraméterezték jól, súgó megjelenítése és kilépés */
+        fprintf(stderr, "Usage: [-v] [-f] source_file target_file\n\nOptions:\n -f  Remove only the first occurrence.\n -v  Print instead write back.\n\nExit codes:\n  0  There are occurrences.\n  1  There is an error like file not exists.\n  2  There is any occurrence.\n  3  This message appeared.\n");
         return 3;
     }
 
     unsigned char *ss, *st, *sub1, *sub2; /* mutatók definiálása */
     /* fájl tartalmának teljes beolvasása memóriába */
     /* ha az első paraméter -f, odébb csúsznak a paraméter indexek */
-    ss = read_whole_file(argv[fast ? 2 : 1]);
-    st = read_whole_file(argv[fast ? 3 : 2]);
-    int state = 2; /* feltételezem, hogy nem lesz találat */
+    ss = read_whole_file(argv[argf]);
+    st = read_whole_file(argv[argf + 1]);
 
     do {
         /* ss-ben megkeresi az első pontos előfordulását st-nek és a memóriacímét sub1-be teszi, így a mutató a szöveg elejét nem tartalmazza */
@@ -83,15 +110,19 @@ int main(int argc, char *argv[]) {
         }
     } while (sub1 != NULL);
 
-    /* megy a stdout kimenetre a feldolgozott tartalom, a többi már a bash dolga :D */
-    printf("%s", ss);
+    if (verb) { /* ha a kimenetre kérik a feldolgozott tartalmat */
+        /* megy a stdout kimenetre a feldolgozott tartalom */
+        printf("%s", ss);
+        fflush(stdout);
+    }
+    else {
+        /* megy vissza a forrás fájlba a feldolgozott tartalom */
+        rewrite_whole_file(argv[argf], ss);
+    }
 
     /* fel kell szabadítani a memóriát, mert a read_whole_file metódus az malloc metódussal lefoglalta a memória egy részét, és kézzel kell szabaddá tenni */
     free(ss);
     free(st);
-
-    /* még mielőtt kilép a program, hogy bash-ben menjen a pipe, flush kell */
-    fflush(stdout);
 
     return state; /* találattól függően 0 vagy 2 kóddal tér vissza */
 }
