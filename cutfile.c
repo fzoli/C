@@ -58,24 +58,24 @@ int main(int argc, char *argv[]) {
     /* fájl tartalmának teljes beolvasása memóriába */
     ss = read_whole_file(argv[1]);
     st = read_whole_file(argv[2]);
-    int state = 0; /* feltételezem, hogy lesz találat */
+    int state = 2; /* feltételezem, hogy nem lesz találat */
 
-    /* ss-ben megkeresi az első pontos előfordulását st-nek és a memóriacímét sub1-be teszi, így a mutató a szöveg elejét nem tartalmazza */
-    sub1 = strstr(ss, st);
-    /* ha talált: a pontos találat feltétele, hogy a talált karakter az első karakter legyen, vagy a talált karakter előtt új sor legyen */
-    while (sub1 != NULL && !(*ss == *sub1 || sub1[-1] == '\n')) {
-        sub1 = strstr(sub1 + 1, st);
-    }
+    do {
+        /* ss-ben megkeresi az első pontos előfordulását st-nek és a memóriacímét sub1-be teszi, így a mutató a szöveg elejét nem tartalmazza */
+        sub1 = strstr(ss, st);
+        /* ha talált: a pontos találat feltétele, hogy a talált karakter az első karakter legyen, vagy a talált karakter előtt új sor legyen */
+        while (sub1 != NULL && !(*ss == *sub1 || sub1[-1] == '\n')) {
+            sub1 = strstr(sub1 + 1, st);
+        }
 
-    if (sub1) { /* ha van memóriacím, tehát van találat */
-        /* az [első előfordulás után] + [keresett szöveg mérete] címmel arrébb lévő memóriacím sub2-be kerül, így a string végét kapjuk */
-        sub2 = strstr(sub1 + 1, sub1 + strlen(st));
-        /* a keresett szöveg helyére a string végét teszi plusz a string vége jelet is bele veszi (ezért van + 1 index növelés) */
-        strncpy(sub1, sub1 + strlen(st), strlen(sub2) + 1);
-    }
-    else { /* ha nincs találat, nincs vágás */
-        state = 2;
-    }
+        if (sub1) { /* ha van memóriacím, tehát van találat */
+            state = 0; /* állapotkód OK-ra állítása jelezve, volt min. egy találat */
+            /* az [első előfordulás után] + [keresett szöveg mérete] címmel arrébb lévő memóriacím sub2-be kerül, így a string végét kapjuk */
+            sub2 = strstr(sub1 + 1, sub1 + strlen(st));
+            /* a keresett szöveg helyére a string végét teszi plusz a string vége jelet is bele veszi (ezért van + 1 index növelés) */
+            strncpy(sub1, sub1 + strlen(st), strlen(sub2) + 1);
+        }
+    } while (sub1 != NULL);
 
     /* megy a stdout kimenetre a feldolgozott tartalom, a többi már a bash dolga :D */
     printf("%s", ss);
