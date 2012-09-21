@@ -36,10 +36,7 @@ static unsigned char *read_whole_file(const char *file_name) {
         exit(EXIT_FAILURE);
     }
     bytes_read = fread(contents, sizeof(unsigned char), s, f);
-    if (bytes_read < s) {
-        contents[bytes_read] = '\0';
-    }
-    else if (bytes_read > s) {
+    if (bytes_read != s) {
         fprintf(stderr, "Short read of %s: expected %d bytes but got %d: %s.\n", file_name, s, bytes_read, strerror(errno));
         exit(EXIT_FAILURE);
     }
