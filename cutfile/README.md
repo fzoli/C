@@ -1,4 +1,4 @@
-<p>My first C program's name is <b>Cutfile</b>.</p>
+<p>My first C program's name for Linux is <b>Cutfile</b>.</p>
 <p>It needs two text file from command line parameter and it removes content of second file from the first file.</p>
 <p><b>Usage:</b> ./cutfile [-a] [-f] [-v] first_file second_file</p>
 <p>
