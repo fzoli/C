@@ -1,0 +1,7 @@
+Az első értelmesebb C++ nyelven írt alkalmazásom.
+
+HTTP kapcsolaton keresztül lekérdezi a ClassFM oldaláról,
+melyik dal megy éppen a rádióban és megjeleníti azt egy egyszerű felületen.
+
+A frissítés gombra kattintva a program megismétli a lekérdezést;
+a mentés gombra kattintva egy txt fájl végéhez fűzi hozzá a dal adatait.
