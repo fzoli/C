@@ -76,7 +76,7 @@ bool RadioInfoForm::isSaved() {
     if (is.is_open()) {
         while (!is.eof()) {
             std::getline(is, line);
-            if (music->text().find(line) != music->text().npos) {
+            if (line.find(music->text()) < line.npos) {
                 found = true;
                 break;
             }
