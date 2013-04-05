@@ -4,4 +4,8 @@ HTTP kapcsolaton keresztül lekérdezi a ClassFM oldaláról,
 melyik dal megy éppen a rádióban és megjeleníti azt egy egyszerű felületen.
 
 A frissítés gombra kattintva a program megismétli a lekérdezést;
-a mentés gombra kattintva egy txt fájl végéhez fűzi hozzá a dal adatait.
+a mentés gombra kattintva a music.txt fájl végéhez fűzi hozzá a dal adatait.
+
+A mentés csak akkor érhető el, ha a fájlban még nem szerepel az aktuális adat.
+Ha a mentés nem sikerül, jelez a felhasználónak a felületen.
+
