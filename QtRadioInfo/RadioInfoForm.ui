@@ -129,6 +129,9 @@
    <property name="toolTip">
     <string>Frissíti az adatokat.</string>
    </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

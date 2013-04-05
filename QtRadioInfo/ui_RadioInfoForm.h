@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'RadioInfoForm.ui'
 **
-** Created: Fri Apr 5 00:51:56 2013
+** Created: Fri Apr 5 23:36:27 2013
 **      by: Qt User Interface Compiler version 4.6.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -131,6 +131,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionRefresh->setToolTip(QApplication::translate("RadioInfoForm", "Friss\303\255ti az adatokat.", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
+        actionRefresh->setShortcut(QApplication::translate("RadioInfoForm", "F5", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("RadioInfoForm", "El\305\221ad\303\263:", 0, QApplication::UnicodeUTF8));
         lbArtist->setText(QApplication::translate("RadioInfoForm", "-", 0, QApplication::UnicodeUTF8));
         label2->setText(QApplication::translate("RadioInfoForm", "C\303\255m:", 0, QApplication::UnicodeUTF8));

@@ -12,6 +12,8 @@
 
 #include <boost/thread.hpp>
 
+#include "Music.hpp"
+
 #include "ui_RadioInfoForm.h"
 
 class RadioInfoForm : public QMainWindow {
@@ -27,8 +29,10 @@ private slots:
     void onStatusChanged(const char*, bool);
 private:
     Ui::RadioInfoForm widget;
+    Music* music;
     void load();
     void t_load();
+    bool isSaved();
     void setMessage(const char*, bool);
     void setMessage(const char*, bool, bool);
     void setInfoText(std::string, std::string);
