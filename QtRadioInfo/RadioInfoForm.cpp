@@ -87,10 +87,17 @@ bool RadioInfoForm::isSaved() {
 }
 
 void RadioInfoForm::onSave() {
-    if (music == NULL || isSaved()) return;
+    if (music == NULL) {
+        return;
+    }
+    if (isSaved()) {
+        widget.actionSave->setEnabled(false);
+        return;
+    }
     std::ofstream os;
     os.open("music.txt", std::ios_base::app);
     os << music->text() + "\r\n";
+    if (os.good()) widget.actionSave->setEnabled(false);
+    else setMessage("Sikertelen mentés!", false, false);
     os.close();
-    widget.actionSave->setEnabled(false);
 }
