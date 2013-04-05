@@ -7,21 +7,19 @@
 
 #include "Music.hpp"
 
-#include <qt4/QtCore/qstring.h>
-
 Music::Music(std::string a, std::string t) {
     Music::a = a;
     Music::t = t;
 }
 
 std::string Music::artist() {
-    return QString::fromStdString(a.substr(0, a.rfind(" (most megy)"))).toStdString();
+    return a.substr(0, a.rfind(" (most megy)"));
 }
 
 std::string Music::title() {
-    return QString::fromStdString(t).toStdString();
+    return t;
 }
 
 std::string Music::text() {
-    return artist() + " — " + title();
+    return artist() + " - " + title();
 }

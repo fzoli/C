@@ -33,12 +33,12 @@ void RadioInfoForm::t_load() {
     RadioInfo i;
     if (i.success()) {
         music = i.music();
-        std::cout << music->text() + "\n";
+//        std::cout << music->text() + "\n";
         setInfoText(music->artist(), music->title());
         emit statusChange("Sikeres betöltés.", false);
     }
     else {
-        std::cerr << i.error() + "\n";
+//        std::cerr << i.error() + "\n";
         emit statusChange(i.error().c_str(), true);
     }
 }
