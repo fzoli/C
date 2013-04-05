@@ -9,3 +9,16 @@ a mentés gombra kattintva a music.txt fájl végéhez fűzi hozzá a dal adatai
 A mentés csak akkor érhető el, ha a fájlban még nem szerepel az aktuális adat.
 Ha a mentés nem sikerül, jelez a felhasználónak a felületen.
 
+Shared library függések:
+libcurlpp.so.0
+libstdc++.so.6
+libcurl-gnutls.so.4
+libboost_regex.so.1.42.0
+libboost_thread.so.1.42.0
+libQtGui.so.4
+libQtCore.so.4
+libpthread.so.0
+libm.so.6
+libgcc_s.so.1
+libc.so.6
+
