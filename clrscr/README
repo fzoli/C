@@ -1,0 +1,16 @@
+Egy kis teszt Shared library készítésére.
+
+A library neve clrscr, ami a konzolos képernyőt törli le.
+Linuxon a clear parancsot, Windowson a cls parancsot használja erre a célra.
+A main.c egy egyszerű tesztalkalmazás, ami meghívja a clrscr() metódust.
+
+Linuxra Makefile is lett írva, így azon egyszerű lefordítani:
+./make # elkészíti a "libclrscr.so" fájlt és a "test" futtatható alkalmazást
+./make install # a "libclrscr.so" fájlt telepíti a rendszerre
+./make clear # törli a make által létrehozott fájlokat a forráskönyvtárból
+
+A make install opcionális. Lényeg, hogy a tesztalkalmazás elérje a lib fájlt.
+Egyszeri tesztre akár ez is megteszi a tesztalkalmazás futtatása előtt:
+export LD_LIBRARY_PATH=/home/zoli/lib:$LD_LIBRARY_PATH
+Így a /home/zoli/lib könyvtárban lévő összes so fájl kijelentkezésig elérhető.
+
