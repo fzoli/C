@@ -14,3 +14,5 @@ Egyszeri tesztre akár ez is megteszi a tesztalkalmazás futtatása előtt:
 export LD_LIBRARY_PATH=/home/zoli/lib:$LD_LIBRARY_PATH
 Így a /home/zoli/lib könyvtárban lévő összes so fájl kijelentkezésig elérhető.
 
+Ha a teszt fut rendesen, akkor akár Javaban is tesztelhető a lib.
+A jna könyvtárban van egy példa java kód.
