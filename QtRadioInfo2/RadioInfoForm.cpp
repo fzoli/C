@@ -11,9 +11,9 @@
 #include <iostream>
 #include <fstream>
 
-#include <qt4/QtCore/QUrl>
-#include <qt4/QtNetwork/QNetworkReply>
-#include <qt4/QtNetwork/QNetworkRequest>
+#include <QtCore/QUrl>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
 
 RadioInfoForm::RadioInfoForm() {
     widget.setupUi(this);

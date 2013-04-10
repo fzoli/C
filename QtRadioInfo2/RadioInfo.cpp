@@ -5,7 +5,7 @@
  * Created on 2013. április 3., 22:08
  */
 
-#include <qt4/QtCore/QRegExp>
+#include <QtCore/QRegExp>
 
 #include "RadioInfo.hpp"
 

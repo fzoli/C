@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include <qt4/QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkAccessManager>
 
 #include "Music.hpp"
 
