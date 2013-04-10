@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'RadioInfoForm.h'
 **
-** Created: Wed Apr 10 02:18:38 2013
+** Created: Wed Apr 10 02:23:12 2013
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -36,7 +36,7 @@ static const uint qt_meta_data_RadioInfoForm[] = {
  // slots: signature, parameters, type, tag, flags
       48,   14,   14,   14, 0x08,
       57,   14,   14,   14, 0x08,
-      69,   15,   14,   14, 0x08,
+      69,   14,   14,   14, 0x08,
 
        0        // eod
 };
@@ -44,7 +44,7 @@ static const uint qt_meta_data_RadioInfoForm[] = {
 static const char qt_meta_stringdata_RadioInfoForm[] = {
     "RadioInfoForm\0\0,\0statusChange(const char*,bool)\0"
     "onSave()\0onRefresh()\0"
-    "onStatusChanged(const char*,bool)\0"
+    "requestReceived(QNetworkReply*)\0"
 };
 
 const QMetaObject RadioInfoForm::staticMetaObject = {
@@ -79,7 +79,7 @@ int RadioInfoForm::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 0: statusChange((*reinterpret_cast< const char*(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 1: onSave(); break;
         case 2: onRefresh(); break;
-        case 3: onStatusChanged((*reinterpret_cast< const char*(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 3: requestReceived((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
         default: ;
         }
         _id -= 4;

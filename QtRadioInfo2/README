@@ -1,0 +1,16 @@
+Az első értelmesebb C++ nyelven írt alkalmazásom második kiadása.
+
+Funkcionalitása nem változott, de át lett írva teljesen Qt alapúra,
+hogy egyszerűbb legyen lefordítani és hogy a futtatáshoz is
+elegendő legyen csak a Qt feltelepítése.
+
+Shared library függések:
+libQtGui.so.4
+libQtNetwork.so.4
+libQtCore.so.4
+libpthread.so.0
+libstdc++.so.6
+libm.so.6
+libgcc_s.so.1
+libc.so.6
+
