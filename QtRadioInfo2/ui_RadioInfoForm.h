@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'RadioInfoForm.ui'
 **
-** Created: Wed Apr 10 02:23:09 2013
+** Created: Mon May 13 23:12:48 2013
 **      by: Qt User Interface Compiler version 4.6.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -44,19 +44,19 @@ public:
             RadioInfoForm->setObjectName(QString::fromUtf8("RadioInfoForm"));
         RadioInfoForm->resize(200, 118);
         QIcon icon;
-        icon.addFile(QString::fromUtf8("img/ClassFM-logo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/img/ClassFM-logo.png"), QSize(), QIcon::Normal, QIcon::Off);
         RadioInfoForm->setWindowIcon(icon);
         actionSave = new QAction(RadioInfoForm);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
         actionSave->setCheckable(false);
         actionSave->setChecked(false);
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8("img/Save-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8(":/img/Save-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSave->setIcon(icon1);
         actionRefresh = new QAction(RadioInfoForm);
         actionRefresh->setObjectName(QString::fromUtf8("actionRefresh"));
         QIcon icon2;
-        icon2.addFile(QString::fromUtf8("img/Refresh-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8(":/img/Refresh-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionRefresh->setIcon(icon2);
         centralWidget = new QWidget(RadioInfoForm);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));

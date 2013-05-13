@@ -14,8 +14,8 @@
    <string>Rádió infó</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>img/ClassFM-logo.png</normaloff>img/ClassFM-logo.png</iconset>
+   <iconset resource="images.qrc">
+    <normaloff>:/img/ClassFM-logo.png</normaloff>:/img/ClassFM-logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -105,8 +105,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>img/Save-icon.png</normaloff>img/Save-icon.png</iconset>
+    <iconset resource="images.qrc">
+     <normaloff>:/img/Save-icon.png</normaloff>:/img/Save-icon.png</iconset>
    </property>
    <property name="text">
     <string>Mentés</string>
@@ -120,8 +120,8 @@
   </action>
   <action name="actionRefresh">
    <property name="icon">
-    <iconset>
-     <normaloff>img/Refresh-icon.png</normaloff>img/Refresh-icon.png</iconset>
+    <iconset resource="images.qrc">
+     <normaloff>:/img/Refresh-icon.png</normaloff>:/img/Refresh-icon.png</iconset>
    </property>
    <property name="text">
     <string>Frissítés</string>
@@ -135,6 +135,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>

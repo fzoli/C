@@ -10,6 +10,7 @@
 
 #include <string>
 
+#include <QtCore/QDir>
 #include <QtNetwork/QNetworkAccessManager>
 
 #include "Music.hpp"
@@ -30,6 +31,7 @@ private slots:
 private:
     Ui::RadioInfoForm widget;
     QNetworkAccessManager* manager;
+    QDir* appDir;
     Music* music;
     void load();
     void load(std::string);
@@ -37,6 +39,7 @@ private:
     void setMessage(const char*, bool);
     void setMessage(const char*, bool, bool);
     void setInfoText(std::string, std::string);
+    const char* getMusicFilePath();
 };
 
 #endif	/* _RADIOINFOFORM_H */

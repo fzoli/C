@@ -18,6 +18,7 @@
 RadioInfoForm::RadioInfoForm() {
     widget.setupUi(this);
     manager = new QNetworkAccessManager(this);
+    appDir = new QDir(QCoreApplication::applicationDirPath());
     connect(widget.actionSave, SIGNAL(activated()), this, SLOT(onSave()));
     connect(widget.actionRefresh, SIGNAL(activated()), this, SLOT(onRefresh()));
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(requestReceived(QNetworkReply*)));
@@ -25,6 +26,10 @@ RadioInfoForm::RadioInfoForm() {
 }
 
 RadioInfoForm::~RadioInfoForm() {
+}
+
+const char* RadioInfoForm::getMusicFilePath() {
+    return appDir->absoluteFilePath("music.txt").toUtf8().data();
 }
 
 void RadioInfoForm::load() {
@@ -68,7 +73,7 @@ bool RadioInfoForm::isSaved() {
     if (music == NULL) return false;
     std::string line;
     std::ifstream is;
-    is.open("music.txt");
+    is.open(getMusicFilePath());
     bool found = false;
     if (is.is_open()) {
         while (!is.eof()) {
@@ -92,7 +97,7 @@ void RadioInfoForm::onSave() {
         return;
     }
     std::ofstream os;
-    os.open("music.txt", std::ios_base::app);
+    os.open(getMusicFilePath(), std::ios_base::app);
     os << music->text() + "\r\n";
     if (os.good()) widget.actionSave->setEnabled(false);
     else setMessage("Sikertelen mentés!", false, false);

@@ -12,6 +12,7 @@
                    displayName="Resource Files"
                    projectFiles="true">
       <itemPath>RadioInfoForm.ui</itemPath>
+      <itemPath>images.qrc</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -39,6 +40,8 @@
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <qt>
         <modules>core gui</modules>
@@ -59,6 +62,8 @@
       </item>
       <item path="RadioInfoForm.ui" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="images.qrc" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -66,6 +71,8 @@
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <qt>
         <buildMode>1</buildMode>
@@ -98,6 +105,8 @@
       <item path="RadioInfoForm.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="RadioInfoForm.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="images.qrc" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
