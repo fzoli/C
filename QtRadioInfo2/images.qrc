@@ -1,0 +1,7 @@
+<RCC>
+  <qresource>
+    <file>img/ClassFM-logo.png</file>
+    <file>img/Refresh-icon.png</file>
+    <file>img/Save-icon.png</file>
+  </qresource>
+</RCC>
