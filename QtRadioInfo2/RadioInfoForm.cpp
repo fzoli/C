@@ -25,9 +25,6 @@ RadioInfoForm::RadioInfoForm() {
     load();
 }
 
-RadioInfoForm::~RadioInfoForm() {
-}
-
 const char* RadioInfoForm::getMusicFilePath() {
     return appDir->absoluteFilePath("music.txt").toUtf8().data();
 }

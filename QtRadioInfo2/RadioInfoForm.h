@@ -21,7 +21,6 @@ class RadioInfoForm : public QMainWindow {
     Q_OBJECT
 public:
     RadioInfoForm();
-    virtual ~RadioInfoForm();
 signals:
     void statusChange(const char*, bool);
 private slots:
