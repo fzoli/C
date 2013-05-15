@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'RadioInfoForm.h'
 **
-** Created: Wed May 15 19:03:24 2013
+** Created: Wed May 15 22:09:47 2013
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,27 +23,23 @@ static const uint qt_meta_data_RadioInfoForm[] = {
        4,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
-
- // signals: signature, parameters, type, tag, flags
-      17,   15,   14,   14, 0x05,
+       0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      48,   14,   14,   14, 0x08,
-      57,   14,   14,   14, 0x08,
-      69,   14,   14,   14, 0x08,
+      15,   14,   14,   14, 0x08,
+      24,   14,   14,   14, 0x08,
+      36,   14,   14,   14, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_RadioInfoForm[] = {
-    "RadioInfoForm\0\0,\0statusChange(const char*,bool)\0"
-    "onSave()\0onRefresh()\0"
+    "RadioInfoForm\0\0onSave()\0onRefresh()\0"
     "requestReceived(QNetworkReply*)\0"
 };
 
@@ -76,21 +72,13 @@ int RadioInfoForm::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: statusChange((*reinterpret_cast< const char*(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 1: onSave(); break;
-        case 2: onRefresh(); break;
-        case 3: requestReceived((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
+        case 0: onSave(); break;
+        case 1: onRefresh(); break;
+        case 2: requestReceived((*reinterpret_cast< QNetworkReply*(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 4;
+        _id -= 3;
     }
     return _id;
-}
-
-// SIGNAL 0
-void RadioInfoForm::statusChange(const char * _t1, bool _t2)
-{
-    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
-    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_END_MOC_NAMESPACE

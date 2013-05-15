@@ -12,8 +12,8 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     
-    RadioInfoForm* form = new RadioInfoForm();
-    form->show();
+    RadioInfoForm form;
+    form.show();
     
     return app.exec();
 }
