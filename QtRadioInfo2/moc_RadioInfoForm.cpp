@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'RadioInfoForm.h'
 **
-** Created: Wed May 15 22:09:47 2013
+** Created: Wed Jun 5 16:12:25 2013
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!
