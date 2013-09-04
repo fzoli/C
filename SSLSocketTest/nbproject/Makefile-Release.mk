@@ -40,7 +40,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/SSLSocket.o \
 	${OBJECTDIR}/SSLSocketException.o \
 	${OBJECTDIR}/SocketException.o \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/tcpstream.o
 
 
 # C Compiler Flags
@@ -96,6 +97,11 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/tcpstream.o: tcpstream.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/tcpstream.o tcpstream.cpp
 
 # Subprojects
 .build-subprojects:

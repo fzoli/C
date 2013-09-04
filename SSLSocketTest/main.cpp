@@ -10,6 +10,8 @@
 #include "SSLServerSocket.h"
 #include "CertificateException.h"
 
+#include "tcpstream.h"
+
 #define PORT 9443
 
 using namespace std;
@@ -41,14 +43,14 @@ void* server(void*) {
         s.close();
     }
     catch (CertificateException ex) {
-        cout << "Certificate exception: " + ex.msg() + "\n";
+        cerr << "Certificate exception: " + ex.msg() + "\n";
     }
     catch (SSLSocketException ex) {
-        cout << "SSL Server Socket exception: " + ex.msg() + "\n";
+        cerr << "SSL Server Socket exception: " + ex.msg() + "\n";
         waitServer = -1;
     }
     catch (SocketException ex) {
-        cout << "Socket Server exception: " + ex.msg() + "\n";
+        cerr << "Socket Server exception: " + ex.msg() + "\n";
         waitServer = -1;
     }
     return NULL;
@@ -67,21 +69,38 @@ void* client(void*) {
         c.close();
     }
     catch (CertificateException ex) {
-        cout << "Certificate exception: " + ex.msg() + "\n";
+        cerr << "Certificate exception: " + ex.msg() + "\n";
     }
     catch (SSLSocketException ex) {
-        cout << "SSL Socket exception: " + ex.msg() + "\n";
+        cerr << "SSL Socket exception: " + ex.msg() + "\n";
     }
     catch (SocketException ex) {
-        cout << "Socket exception: " + ex.msg() + "\n";
+        cerr << "Socket exception: " + ex.msg() + "\n";
     }
     return NULL;
+}
+
+void streamTest() {
+    std::string line;
+    tcpstream sock;
+    sock.connect("localhost", "80");
+    if (sock.bad()) {
+        cerr << "Localhost is not available.\n";
+        return;
+    }
+    sock << "GET /\r\n\r\n";
+    while (sock.connected()) {
+       std::getline(sock, line);
+       cout << line;
+    }
+    cout << "\n";
 }
 
 /*
  * 
  */
 int main(int argc, char** argv) {
+    streamTest();
     pthread_t serverThread;
     if (pthread_create(&serverThread, NULL, &server, NULL)) {
         cerr << "Server thread could not be created.";
@@ -95,15 +114,15 @@ int main(int argc, char** argv) {
     }
     pthread_t clientThread;
     if (pthread_create(&clientThread, NULL, &client, NULL)) {
-        cerr << "Client thread could not be created.";
+        cerr << "Client thread could not be created.\n";
         return EXIT_FAILURE;
     }
     if (pthread_join(serverThread, NULL)) {
-        cerr << "Could not join server thread.";
+        cerr << "Could not join server thread.\n";
         return EXIT_FAILURE;
     }
     if (pthread_join(clientThread, NULL)) {
-        cerr << "Could not join client thread.";
+        cerr << "Could not join client thread.\n";
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
