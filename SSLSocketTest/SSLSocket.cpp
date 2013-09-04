@@ -207,7 +207,7 @@ void SSLSocket::read(std::string& s) const {
     memset(buf, 0, bufsize + 1);
     s = "";
     
-    std::stringstream ss;
+    std::ostringstream ss;
     do {
         status = read(buf, bufsize);
         ss.write(buf, status);
