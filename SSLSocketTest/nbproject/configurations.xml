@@ -19,6 +19,7 @@
       <itemPath>SSLSocketException.h</itemPath>
       <itemPath>SocketException.h</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>seqbuf.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -70,6 +71,8 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="seqbuf.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -104,6 +107,8 @@
       <item path="SocketException.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="seqbuf.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

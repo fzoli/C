@@ -20,8 +20,6 @@ class SSLSocket {
     
     protected:
         
-        SSL_CTX* ctx;
-        
         struct  connection {
             int socket;
             SSL *sslHandle;
@@ -34,7 +32,7 @@ class SSLSocket {
         virtual ~SSLSocket();
         
         bool isClosed();
-        void close();
+        virtual void close();
         void write(int byte);
         void write(const char *text) const;
         void write(const void *buf, int num) const;
@@ -51,6 +49,7 @@ class SSLSocket {
         connection conn;
         static int count;
         static pthread_mutex_t mutexCount;
+        
         static void loadSSL();
         static void unloadSSL();
         static int tcpConnect(const char *addr, uint16_t port);
@@ -61,6 +60,7 @@ class SSLSocket {
     protected:
         
         bool closed;
+        SSL_CTX* ctx;
         
         SSLSocket();
         
