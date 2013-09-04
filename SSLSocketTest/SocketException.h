@@ -1,5 +1,12 @@
-#ifndef SocketException_class
-#define SocketException_class
+/* 
+ * File:   SocketException.h
+ * Author: zoli
+ *
+ * Created on 2013. szeptember 4., 16:11
+ */
+
+#ifndef SOCKETEXCEPTION_H
+#define	SOCKETEXCEPTION_H
 
 #include <string>
 #include <stdexcept>
@@ -8,13 +15,10 @@ class SocketException : public std::runtime_error {
     
   public:
 
-    SocketException(std::string s="") : std::runtime_error(s) {}
+    SocketException(std::string msg);
   
-    std::string msg() {
-      std::string desc(what());
-      return desc;
-    }
+    std::string msg();
   
 };
 
-#endif
+#endif	/* SOCKETEXCEPTION_H */

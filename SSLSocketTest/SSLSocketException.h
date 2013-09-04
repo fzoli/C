@@ -1,17 +1,21 @@
-#ifndef SSLSocketException_class
-#define SSLSocketException_class
+/* 
+ * File:   SSLSocketException.h
+ * Author: zoli
+ *
+ * Created on 2013. szeptember 4., 16:16
+ */
 
-#include <string>
-#include <stdexcept>
+#ifndef SSLSOCKETEXCEPTION_H
+#define	SSLSOCKETEXCEPTION_H
 
 #include "SocketException.h"
 
 class SSLSocketException : public SocketException {
-    
+
   public:
-      
-    SSLSocketException(std::string s="") : SocketException(s) {}
-    
+
+    SSLSocketException(std::string msg);
+
 };
 
-#endif
+#endif	/* SSLSOCKETEXCEPTION_H */

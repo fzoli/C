@@ -35,8 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/CertificateException.o \
 	${OBJECTDIR}/SSLServerSocket.o \
 	${OBJECTDIR}/SSLSocket.o \
+	${OBJECTDIR}/SSLSocketException.o \
+	${OBJECTDIR}/SocketException.o \
 	${OBJECTDIR}/main.o
 
 
@@ -64,6 +67,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/sslsockettest: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/sslsockettest ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/CertificateException.o: CertificateException.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/CertificateException.o CertificateException.cpp
+
 ${OBJECTDIR}/SSLServerSocket.o: SSLServerSocket.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -73,6 +81,16 @@ ${OBJECTDIR}/SSLSocket.o: SSLSocket.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/SSLSocket.o SSLSocket.cpp
+
+${OBJECTDIR}/SSLSocketException.o: SSLSocketException.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/SSLSocketException.o SSLSocketException.cpp
+
+${OBJECTDIR}/SocketException.o: SocketException.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/SocketException.o SocketException.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

@@ -6,7 +6,7 @@
  */
 
 #include "SSLSocket.h"
-#include "SSLSocketException.h"
+#include "CertificateException.h"
 
 #include <netdb.h>
 #include <netinet/in.h>
@@ -86,16 +86,16 @@ SSL_CTX *SSLSocket::sslCreateCtx(bool client, const char *CAfile, const char *CR
         SSL_CTX_set_default_passwd_cb_userdata(sctx, passwd);
 
         if (SSL_CTX_load_verify_locations(sctx, CAfile, NULL) == 0) {
-            throw SSLSocketException ( "CA file could not be loaded." );
+            throw CertificateException ( "CA file could not be loaded." );
         }
 
         if (SSL_CTX_use_certificate_file(sctx, CRTfile, SSL_FILETYPE_PEM) == 0) {
             ERR_print_errors_fp(stderr);
-            throw SSLSocketException ( "CRT file could not be loaded." );
+            throw CertificateException ( "CRT file could not be loaded." );
         }
 
         if (SSL_CTX_use_PrivateKey_file(sctx, KEYfile, SSL_FILETYPE_PEM) == 0) {
-            throw SSLSocketException ( "KEY file could not be loaded." );
+            throw CertificateException ( "KEY file could not be loaded." );
         }
     }
     

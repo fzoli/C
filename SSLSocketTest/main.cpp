@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "SSLServerSocket.h"
-#include "SSLSocketException.h"
+#include "CertificateException.h"
 
 #define PORT 9443
 #define MAXCONNECTIONS 5
@@ -42,6 +42,9 @@ void* server(void*) {
         c.close();
         s.close();
     }
+    catch (CertificateException ex) {
+        cout << "Certificate exception: " + ex.msg() + "\n";
+    }
     catch (SSLSocketException ex) {
         cout << "SSL Server Socket exception: " + ex.msg() + "\n";
         waitServer = -1;
@@ -64,6 +67,9 @@ void* client(void*) {
         c >> reply;
         cout << reply + "\n";
         c.close();
+    }
+    catch (CertificateException ex) {
+        cout << "Certificate exception: " + ex.msg() + "\n";
     }
     catch (SSLSocketException ex) {
         cout << "SSL Socket exception: " + ex.msg() + "\n";
