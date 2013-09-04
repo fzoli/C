@@ -9,8 +9,7 @@
 
 #include "SSLServerSocket.h"
 #include "CertificateException.h"
-
-#include "tcpstream.h"
+#include "SSLStream.h"
 
 #define PORT 9443
 
@@ -38,7 +37,13 @@ void* server(void*) {
         SSLServerSocket s(PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
         waitServer = 0;
         SSLSocket c = s.accept();
-        c << "Hello World!";
+        
+        c << "Hello" << " ";
+        
+        SSLStream stream(&c);
+        ostream os(&stream);
+        os << "World!";
+        
         c.close();
         s.close();
     }
@@ -63,9 +68,18 @@ void* client(void*) {
     char *KEYpass = (char *) "asdfgh";
     try {
         SSLSocket c("localhost", PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
-        string reply;
-        c >> reply;
-        cout << reply + "\n";
+        
+        SSLStream stream(&c);
+        istream is(&stream);
+        
+        string line;
+        std::getline(is, line);
+        cout << line + "\n";
+        
+//        string reply;
+//        c >> reply;
+//        cout << reply + "\n";
+        
         c.close();
     }
     catch (CertificateException ex) {
@@ -80,27 +94,10 @@ void* client(void*) {
     return NULL;
 }
 
-void streamTest() {
-    std::string line;
-    tcpstream sock;
-    sock.connect("localhost", "80");
-    if (sock.bad()) {
-        cerr << "Localhost is not available.\n";
-        return;
-    }
-    sock << "GET /\r\n\r\n";
-    while (sock.connected()) {
-       std::getline(sock, line);
-       cout << line;
-    }
-    cout << "\n";
-}
-
 /*
  * 
  */
 int main(int argc, char** argv) {
-    streamTest();
     pthread_t serverThread;
     if (pthread_create(&serverThread, NULL, &server, NULL)) {
         cerr << "Server thread could not be created.";

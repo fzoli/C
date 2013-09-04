@@ -202,6 +202,12 @@ std::streamsize tcpbuf::xsputn(const char *s, std::streamsize n) {
     return write(m_data->socket, s, n);
 }
 
+// implementation of xsgetn() for std::streambuf
+std::streamsize tcpbuf::xsgetn(char *s, std::streamsize n) {
+    if (m_data->socket == -1) return -1;
+    return recv(m_data->socket, s, n, 0);
+}
+
 // tops up the buffer with any data waiting in the socket
 bool tcpbuf::fillbuffer(bool block) {
     if (m_data->socket == -1) return false; // not connected

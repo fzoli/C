@@ -1,6 +1,6 @@
 build/Debug/GNU-Linux-x86/main.o: main.cpp SSLServerSocket.h SSLSocket.h \
  CertificateException.h SSLSocketException.h SocketException.h \
- tcpstream.h
+ SSLStream.h
 
 SSLServerSocket.h:
 
@@ -12,4 +12,4 @@ SSLSocketException.h:
 
 SocketException.h:
 
-tcpstream.h:
+SSLStream.h:

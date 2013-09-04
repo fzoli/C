@@ -104,6 +104,7 @@ protected:
     virtual int underflow();
     virtual int overflow(int c = EOF);
     virtual std::streamsize xsputn(const char *s, std::streamsize n);
+    virtual std::streamsize xsgetn(char *s, std::streamsize n);
 
     // tops up the buffer with any data waiting in the socket
     bool fillbuffer(bool block = false);

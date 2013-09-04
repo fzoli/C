@@ -7,6 +7,7 @@
 
 #include "SSLSocket.h"
 #include "CertificateException.h"
+#include "SSLStream.h"
 
 #include <netdb.h>
 #include <netinet/in.h>
@@ -21,6 +22,7 @@ pthread_mutex_t SSLSocket::mutexCount = PTHREAD_MUTEX_INITIALIZER;
 
 SSLSocket::SSLSocket() : closed(false) {
     loadSSL();
+//    stream = NULL;
 }
 
 SSLSocket::~SSLSocket() {
@@ -32,13 +34,19 @@ SSLSocket::SSLSocket(connection c) : closed(false) {
     ctx = NULL;
     conn.socket = c.socket;
     conn.sslHandle = c.sslHandle;
+//    stream = new SSLStream(this);
 }
 
 SSLSocket::SSLSocket(const char *host, uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) : closed(false) {
     loadSSL();
     ctx = sslCreateCtx(true, CAfile, CRTfile, KEYfile, passwd);
     sslConnect(host, port);
+//    stream = new SSLStream(this);
 }
+
+//SSLStream* SSLSocket::getStream() {
+//    return stream;
+//}
 
 bool SSLSocket::isClosed() {
     return closed;
@@ -170,13 +178,15 @@ void SSLSocket::close() {
     sslDestroyCtx(ctx);
 }
 
-void SSLSocket::write(const void *buf, int num) const {
-    if (SSL_write(conn.sslHandle, buf, num) <= 0)
+int SSLSocket::write(const void *buf, int num) const {
+    int status = SSL_write(conn.sslHandle, buf, num);
+    if (status <= 0)
         throw SSLSocketException( "Could not write byte" );
+    return status;
 }
 
-void SSLSocket::write(const char *text) const {
-    write(text, strlen(text));
+int SSLSocket::write(const char *text) const {
+    return write(text, strlen(text));
 }
 
 void SSLSocket::write(int byte) {

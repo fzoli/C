@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/SSLServerSocket.o \
 	${OBJECTDIR}/SSLSocket.o \
 	${OBJECTDIR}/SSLSocketException.o \
+	${OBJECTDIR}/SSLStream.o \
 	${OBJECTDIR}/SocketException.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/tcpstream.o
@@ -87,6 +88,11 @@ ${OBJECTDIR}/SSLSocketException.o: SSLSocketException.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/SSLSocketException.o SSLSocketException.cpp
+
+${OBJECTDIR}/SSLStream.o: SSLStream.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/SSLStream.o SSLStream.cpp
 
 ${OBJECTDIR}/SocketException.o: SocketException.cpp 
 	${MKDIR} -p ${OBJECTDIR}

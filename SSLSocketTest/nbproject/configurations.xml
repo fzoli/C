@@ -8,7 +8,9 @@
       <itemPath>SSLServerSocket.h</itemPath>
       <itemPath>SSLSocket.h</itemPath>
       <itemPath>SSLSocketException.h</itemPath>
+      <itemPath>SSLStream.h</itemPath>
       <itemPath>SocketException.h</itemPath>
+      <itemPath>tcpstream.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -21,11 +23,11 @@
       <itemPath>SSLServerSocket.cpp</itemPath>
       <itemPath>SSLSocket.cpp</itemPath>
       <itemPath>SSLSocketException.cpp</itemPath>
+      <itemPath>SSLStream.cpp</itemPath>
       <itemPath>SocketException.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>seqbuf.h</itemPath>
       <itemPath>tcpstream.cpp</itemPath>
-      <itemPath>tcpstream.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -79,6 +81,10 @@
       </item>
       <item path="SSLSocketException.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="SSLStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SSLStream.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="SocketException.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SocketException.h" ex="false" tool="3" flavor2="0">
@@ -127,6 +133,10 @@
       <item path="SSLSocketException.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SSLSocketException.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SSLStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SSLStream.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SocketException.cpp" ex="false" tool="1" flavor2="0">
       </item>
