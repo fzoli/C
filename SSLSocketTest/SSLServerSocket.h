@@ -22,7 +22,9 @@ class SSLServerSocket : private SSLSocket {
     
     public:
         
-        SSLServerSocket(uint16_t port, int maxConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
+        SSLServerSocket(uint16_t port, uint16_t maxNewConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
+        SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
+        SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile);
         
         SSLSocket accept();
         void close();
@@ -31,7 +33,8 @@ class SSLServerSocket : private SSLSocket {
         
         handles h;
         
-        void open(uint16_t port, int maxConn);
+        void init(uint16_t port, uint16_t maxNewConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
+        void open(uint16_t port, uint16_t maxConn);
         int tcpAccept();
         connection sslAccept();
         

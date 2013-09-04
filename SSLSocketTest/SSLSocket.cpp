@@ -12,9 +12,7 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <unistd.h>
-
 #include <sstream>
-
 #include <openssl/err.h>
 #include <iostream>
 

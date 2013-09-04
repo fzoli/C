@@ -9,15 +9,26 @@
 #include "SSLSocketException.h"
 
 #include <unistd.h>
-
 #include <openssl/err.h>
 
-SSLServerSocket::SSLServerSocket(uint16_t port, int maxConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) {
-    ctx = sslCreateCtx(false, CAfile, CRTfile, KEYfile, passwd);
-    open(port, maxConn);
+SSLServerSocket::SSLServerSocket(uint16_t port, uint16_t maxNewConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) {
+    init(port, maxNewConn, CAfile, CRTfile, KEYfile, passwd);
 }
 
-void SSLServerSocket::open(uint16_t port, int maxConn) {
+SSLServerSocket::SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) {
+    init(port, 10, CAfile, CRTfile, KEYfile, passwd);
+}
+
+SSLServerSocket::SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile) {
+    init(port, 10, CAfile, CRTfile, KEYfile, NULL);
+}
+
+void SSLServerSocket::init(uint16_t port, uint16_t maxNewConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) {
+    ctx = sslCreateCtx(false, CAfile, CRTfile, KEYfile, passwd);
+    open(port, maxNewConn);
+}
+
+void SSLServerSocket::open(uint16_t port, uint16_t maxConn) {
     int handle = socket(AF_INET, SOCK_STREAM, 0);
     if (handle == -1) {
         throw SocketException ( "Could not create server socket." );

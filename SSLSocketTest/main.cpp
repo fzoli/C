@@ -5,37 +5,35 @@
  * Created on 2013. szeptember 1., 19:59
  */
 
-#include <cstdlib>
 #include <iostream>
 
 #include "SSLServerSocket.h"
 #include "CertificateException.h"
 
 #define PORT 9443
-#define MAXCONNECTIONS 5
 
 using namespace std;
 
 int waitServer = 1;
 
-std::string path(std::string filename) {
+string path(string filename) {
     char buff[1024];
     ssize_t len = ::readlink("/proc/self/exe", buff, sizeof(buff) - 1);
     if (len != -1) {
         buff[len] = '\0';
-        std::string s(buff);
+        string s(buff);
         return s.substr(0, s.find_last_of("/") + 1).append(filename);
     }
     throw "path error";
 }
 
 void* server(void*) {
-    std::string CAfile = path("ca.crt");
-    std::string CRTfile = path("server.crt");
-    std::string KEYfile = path("server.key");
+    string CAfile = path("ca.crt");
+    string CRTfile = path("server.crt");
+    string KEYfile = path("server.key");
     char *KEYpass = (char *) "asdfgh";
     try {
-        SSLServerSocket s(PORT, MAXCONNECTIONS, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
+        SSLServerSocket s(PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
         waitServer = 0;
         SSLSocket c = s.accept();
         c << "Hello World!";
@@ -57,13 +55,13 @@ void* server(void*) {
 }
 
 void* client(void*) {
-    std::string CAfile = path("ca.crt");
-    std::string CRTfile = path("client.crt");
-    std::string KEYfile = path("client.key");
+    string CAfile = path("ca.crt");
+    string CRTfile = path("client.crt");
+    string KEYfile = path("client.key");
     char *KEYpass = (char *) "asdfgh";
     try {
         SSLSocket c("localhost", PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
-        std::string reply;
+        string reply;
         c >> reply;
         cout << reply + "\n";
         c.close();
