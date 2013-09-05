@@ -27,6 +27,7 @@ struct sslstream_data {
 };
 
 SSLBuffer::SSLBuffer(SSLSocket* socket) {
+    if (socket == NULL) throw SocketException("socket is null");
     this->socket = socket;
     m_data = new sslstream_data();
     m_data->inbox = new ssldatachunk(1);

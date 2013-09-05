@@ -42,7 +42,6 @@ class SSLSocket {
         int read();
         int read(void *buf, int num) const;
         void read (std::string& s) const;
-//        void setNonBlocking(bool b);
         
         const SSLSocket& operator >> (std::string& s) const;
         const SSLSocket& operator << (const std::string& s) const;
@@ -61,7 +60,6 @@ class SSLSocket {
         static int tcpConnect(const char *addr, uint16_t port);
         void sslConnect(const char *addr, uint16_t port);
         static void sslDisconnect(connection c);
-//        static void setNonBlocking(int sock, bool b);
         
     protected:
         

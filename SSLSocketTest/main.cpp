@@ -68,12 +68,13 @@ void* client(void*) {
     char *KEYpass = (char *) "asdfgh";
     try {
         SSLSocket c("localhost", PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
-        
         istream is(c.getBuffer());
         
-        string line;
-        std::getline(is, line);
-        cout << line + "\n";
+        while (!c.isClosed()) {
+            string line;
+            std::getline(is, line);
+            cout << line + "\n";
+        }
         
 //        string reply;
 //        c >> reply;

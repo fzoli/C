@@ -86,10 +86,6 @@ void SSLSocket::unloadSSL() {
     pthread_mutex_unlock(&mutexCount);
 }
 
-//void SSLSocket::setNonBlocking(bool b) {
-//    setNonBlocking(conn.socket, b);
-//}
-
 SSL_CTX *SSLSocket::sslCreateCtx(bool client, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) {
     SSL_CTX *sctx = SSL_CTX_new(client ? SSLv23_client_method() : SSLv23_server_method());
     if (sctx == NULL) {
@@ -134,17 +130,6 @@ void SSLSocket::sslDisconnect(connection c) {
         SSL_free(c.sslHandle);
     }
 }
-
-//void SSLSocket::setNonBlocking(int sock, bool b) {
-//  int opts = fcntl ( sock, F_GETFL );
-//  
-//  if ( opts < 0 ) return;
-//  
-//  if ( b ) opts = ( opts | O_NONBLOCK );
-//  else opts = ( opts & ~O_NONBLOCK );
-//  
-//  fcntl ( sock, F_SETFL,opts );
-//}
 
 int SSLSocket::tcpConnect(const char *addr, uint16_t port) {
     struct hostent *host = gethostbyname(addr);
@@ -215,14 +200,12 @@ int SSLSocket::write(const char *text) const {
 void SSLSocket::write(int byte) {
     if (byte < 0 || byte > 255) throw SocketException( "Byte out of range" );
     char unsigned byte_char = byte;
-    if (SSL_write(conn.sslHandle, &byte_char, 1) <= 0)
-        throw SSLSocketException( "Could not write byte" );
+    write(&byte_char, 1);
 }
 
 int SSLSocket::read() {
     char buf[1];
-    int status = SSL_read(conn.sslHandle, buf, 1);
-    if ( status < 0 ) throw SocketException ( "Could not read from socket." );
+    int status = read(&buf, 1);
     return status == 0 ? -1 : buf[0];
 }
 
