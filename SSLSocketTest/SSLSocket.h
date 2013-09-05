@@ -32,6 +32,8 @@ class SSLSocket {
         virtual ~SSLSocket();
         
         std::streambuf* getBuffer();
+        char* getClientName();
+        char* getServerName();
         bool isClosed();
         virtual void close();
         void write(int byte);
@@ -49,11 +51,13 @@ class SSLSocket {
         
         connection conn;
         std::streambuf* buffer;
+        char *clientName, *serverName;
         static int count;
         static pthread_mutex_t mutexCount;
         
         static void loadSSL();
         static void unloadSSL();
+        static char *getCommonName(X509 *cert);
         static int tcpConnect(const char *addr, uint16_t port);
         void sslConnect(const char *addr, uint16_t port);
         static void sslDisconnect(connection c);

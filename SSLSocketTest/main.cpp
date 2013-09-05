@@ -40,8 +40,7 @@ void* server(void*) {
         
         c << "Hello" << " ";
         
-        SSLBuffer stream(&c);
-        ostream os(&stream);
+        ostream os(c.getBuffer());
         os << "World!";
         
         c.close();
@@ -49,6 +48,7 @@ void* server(void*) {
     }
     catch (CertificateException ex) {
         cerr << "Certificate exception: " + ex.msg() + "\n";
+        waitServer = -1;
     }
     catch (SSLSocketException ex) {
         cerr << "SSL Server Socket exception: " + ex.msg() + "\n";

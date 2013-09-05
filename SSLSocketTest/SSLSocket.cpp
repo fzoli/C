@@ -23,11 +23,12 @@ pthread_mutex_t SSLSocket::mutexCount = PTHREAD_MUTEX_INITIALIZER;
 SSLSocket::SSLSocket() : closed(false) {
     loadSSL();
     buffer = NULL;
+    clientName = NULL;
+    serverName = NULL;
 }
 
 SSLSocket::~SSLSocket() {
     unloadSSL();
-    close();
 }
 
 SSLSocket::SSLSocket(connection c) : closed(false) {
@@ -36,6 +37,8 @@ SSLSocket::SSLSocket(connection c) : closed(false) {
     conn.socket = c.socket;
     conn.sslHandle = c.sslHandle;
     buffer = new SSLBuffer(this);
+    clientName = getCommonName(SSL_get_peer_certificate(conn.sslHandle));
+    serverName = getCommonName(SSL_get_certificate(conn.sslHandle));
 }
 
 SSLSocket::SSLSocket(const char *host, uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) : closed(false) {
@@ -43,10 +46,20 @@ SSLSocket::SSLSocket(const char *host, uint16_t port, const char *CAfile, const 
     ctx = sslCreateCtx(true, CAfile, CRTfile, KEYfile, passwd);
     sslConnect(host, port);
     buffer = new SSLBuffer(this);
+    clientName = getCommonName(SSL_get_certificate(conn.sslHandle));
+    serverName = getCommonName(SSL_get_peer_certificate(conn.sslHandle));
 }
 
 std::streambuf* SSLSocket::getBuffer() {
     return buffer;
+}
+
+char* SSLSocket::getClientName() {
+    return clientName;
+}
+
+char* SSLSocket::getServerName() {
+    return serverName;
 }
 
 bool SSLSocket::isClosed() {
@@ -170,6 +183,15 @@ void SSLSocket::sslConnect(const char *addr, uint16_t port) {
     // Initiate SSL handshake
     if (SSL_connect(conn.sslHandle) != 1)
         throw SSLSocketException ( "Error during SSL handshake." );
+}
+
+char *SSLSocket::getCommonName(X509 *cert) {
+    if (cert == NULL) throw CertificateException( "Certificate is NULL." );
+    X509_NAME *subjectName;
+    char  *subjectCn = new char[256];
+    subjectName = X509_get_subject_name(cert);
+    if (X509_NAME_get_text_by_NID(subjectName, NID_commonName, subjectCn, 256) != -1) return subjectCn;
+    throw CertificateException( "Could not get common name." );
 }
 
 void SSLSocket::close() {
