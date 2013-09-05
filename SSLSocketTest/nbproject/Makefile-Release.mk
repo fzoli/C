@@ -36,10 +36,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/CertificateException.o \
+	${OBJECTDIR}/SSLBuffer.o \
 	${OBJECTDIR}/SSLServerSocket.o \
 	${OBJECTDIR}/SSLSocket.o \
 	${OBJECTDIR}/SSLSocketException.o \
-	${OBJECTDIR}/SSLStream.o \
 	${OBJECTDIR}/SocketException.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/tcpstream.o
@@ -74,6 +74,11 @@ ${OBJECTDIR}/CertificateException.o: CertificateException.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/CertificateException.o CertificateException.cpp
 
+${OBJECTDIR}/SSLBuffer.o: SSLBuffer.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/SSLBuffer.o SSLBuffer.cpp
+
 ${OBJECTDIR}/SSLServerSocket.o: SSLServerSocket.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -88,11 +93,6 @@ ${OBJECTDIR}/SSLSocketException.o: SSLSocketException.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/SSLSocketException.o SSLSocketException.cpp
-
-${OBJECTDIR}/SSLStream.o: SSLStream.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/SSLStream.o SSLStream.cpp
 
 ${OBJECTDIR}/SocketException.o: SocketException.cpp 
 	${MKDIR} -p ${OBJECTDIR}

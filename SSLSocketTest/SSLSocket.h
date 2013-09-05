@@ -16,8 +16,6 @@
 
 #include <string>
 
-//#include "SSLStream.h"
-
 class SSLSocket {
     
     protected:
@@ -33,7 +31,7 @@ class SSLSocket {
         SSLSocket(const char *host, uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
         virtual ~SSLSocket();
         
-//        SSLStream* getStream();
+        std::streambuf* getBuffer();
         bool isClosed();
         virtual void close();
         void write(int byte);
@@ -50,7 +48,7 @@ class SSLSocket {
     private:
         
         connection conn;
-//        SSLStream* stream;
+        std::streambuf* buffer;
         static int count;
         static pthread_mutex_t mutexCount;
         

@@ -5,10 +5,10 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>CertificateException.h</itemPath>
+      <itemPath>SSLBuffer.h</itemPath>
       <itemPath>SSLServerSocket.h</itemPath>
       <itemPath>SSLSocket.h</itemPath>
       <itemPath>SSLSocketException.h</itemPath>
-      <itemPath>SSLStream.h</itemPath>
       <itemPath>SocketException.h</itemPath>
       <itemPath>tcpstream.h</itemPath>
     </logicalFolder>
@@ -20,10 +20,10 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>CertificateException.cpp</itemPath>
+      <itemPath>SSLBuffer.cpp</itemPath>
       <itemPath>SSLServerSocket.cpp</itemPath>
       <itemPath>SSLSocket.cpp</itemPath>
       <itemPath>SSLSocketException.cpp</itemPath>
-      <itemPath>SSLStream.cpp</itemPath>
       <itemPath>SocketException.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>seqbuf.h</itemPath>
@@ -69,6 +69,10 @@
       </item>
       <item path="CertificateException.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="SSLBuffer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SSLBuffer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="SSLServerSocket.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SSLServerSocket.h" ex="false" tool="3" flavor2="0">
@@ -80,10 +84,6 @@
       <item path="SSLSocketException.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SSLSocketException.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="SSLStream.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SSLStream.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SocketException.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -122,6 +122,10 @@
       </item>
       <item path="CertificateException.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="SSLBuffer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SSLBuffer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="SSLServerSocket.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SSLServerSocket.h" ex="false" tool="3" flavor2="0">
@@ -133,10 +137,6 @@
       <item path="SSLSocketException.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SSLSocketException.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="SSLStream.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SSLStream.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SocketException.cpp" ex="false" tool="1" flavor2="0">
       </item>

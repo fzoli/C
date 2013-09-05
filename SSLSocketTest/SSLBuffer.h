@@ -14,12 +14,12 @@
 
 struct sslstream_data;
 
-class SSLStream : public std::streambuf {
+class SSLBuffer : public std::streambuf {
     
     public:
         
-        explicit SSLStream(SSLSocket* socket);
-        virtual ~SSLStream();
+        explicit SSLBuffer(SSLSocket* socket);
+        virtual ~SSLBuffer();
         
     protected:
         

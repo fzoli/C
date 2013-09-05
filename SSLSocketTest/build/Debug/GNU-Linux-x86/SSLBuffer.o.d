@@ -1,7 +1,7 @@
-build/Debug/GNU-Linux-x86/SSLStream.o: SSLStream.cpp SSLStream.h \
+build/Debug/GNU-Linux-x86/SSLBuffer.o: SSLBuffer.cpp SSLBuffer.h \
  SSLSocket.h SSLSocketException.h SocketException.h
 
-SSLStream.h:
+SSLBuffer.h:
 
 SSLSocket.h:
 

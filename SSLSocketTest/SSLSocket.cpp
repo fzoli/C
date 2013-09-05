@@ -6,8 +6,8 @@
  */
 
 #include "SSLSocket.h"
+#include "SSLBuffer.h"
 #include "CertificateException.h"
-#include "SSLStream.h"
 
 #include <netdb.h>
 #include <netinet/in.h>
@@ -22,11 +22,12 @@ pthread_mutex_t SSLSocket::mutexCount = PTHREAD_MUTEX_INITIALIZER;
 
 SSLSocket::SSLSocket() : closed(false) {
     loadSSL();
-//    stream = NULL;
+    buffer = NULL;
 }
 
 SSLSocket::~SSLSocket() {
     unloadSSL();
+    close();
 }
 
 SSLSocket::SSLSocket(connection c) : closed(false) {
@@ -34,19 +35,19 @@ SSLSocket::SSLSocket(connection c) : closed(false) {
     ctx = NULL;
     conn.socket = c.socket;
     conn.sslHandle = c.sslHandle;
-//    stream = new SSLStream(this);
+    buffer = new SSLBuffer(this);
 }
 
 SSLSocket::SSLSocket(const char *host, uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) : closed(false) {
     loadSSL();
     ctx = sslCreateCtx(true, CAfile, CRTfile, KEYfile, passwd);
     sslConnect(host, port);
-//    stream = new SSLStream(this);
+    buffer = new SSLBuffer(this);
 }
 
-//SSLStream* SSLSocket::getStream() {
-//    return stream;
-//}
+std::streambuf* SSLSocket::getBuffer() {
+    return buffer;
+}
 
 bool SSLSocket::isClosed() {
     return closed;

@@ -9,7 +9,7 @@
 
 #include "SSLServerSocket.h"
 #include "CertificateException.h"
-#include "SSLStream.h"
+#include "SSLBuffer.h"
 
 #define PORT 9443
 
@@ -40,7 +40,7 @@ void* server(void*) {
         
         c << "Hello" << " ";
         
-        SSLStream stream(&c);
+        SSLBuffer stream(&c);
         ostream os(&stream);
         os << "World!";
         
@@ -69,8 +69,7 @@ void* client(void*) {
     try {
         SSLSocket c("localhost", PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
         
-        SSLStream stream(&c);
-        istream is(&stream);
+        istream is(c.getBuffer());
         
         string line;
         std::getline(is, line);

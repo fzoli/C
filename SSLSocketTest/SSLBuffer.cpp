@@ -5,7 +5,7 @@
  * Created on 2013. szeptember 4., 18:55
  */
 
-#include "SSLStream.h"
+#include "SSLBuffer.h"
 #include "SSLSocketException.h"
 
 const int BUFFER_SIZE = 1024;
@@ -26,7 +26,7 @@ struct sslstream_data {
     sslstream_data() : inbox(NULL) { }
 };
 
-SSLStream::SSLStream(SSLSocket* socket) {
+SSLBuffer::SSLBuffer(SSLSocket* socket) {
     this->socket = socket;
     m_data = new sslstream_data();
     m_data->inbox = new ssldatachunk(1);
@@ -34,7 +34,7 @@ SSLStream::SSLStream(SSLSocket* socket) {
     setg(data, data, data);
 }
 
-SSLStream::~SSLStream() {
+SSLBuffer::~SSLBuffer() {
     // free up any buffered data
     ssldatachunk *curchunk = m_data->inbox;
     while (curchunk != NULL) {
@@ -46,7 +46,7 @@ SSLStream::~SSLStream() {
     m_data = NULL;
 }
 
-int SSLStream::underflow() {
+int SSLBuffer::underflow() {
     // check for more data; if we're a blocking socket and we don't have another
     // buffer waiting then block until more data arrives
     if (m_data->inbox->next == NULL) {
@@ -83,14 +83,14 @@ int SSLStream::underflow() {
     return *newdata;
 }
 
-int SSLStream::overflow(int c) {
+int SSLBuffer::overflow(int c) {
     return socket->write(&c, sizeof(c));
 }
 
-std::streamsize SSLStream::xsputn(const char *s, std::streamsize n) {
+std::streamsize SSLBuffer::xsputn(const char *s, std::streamsize n) {
     return socket->write(s, n);
 }
 
-std::streamsize SSLStream::xsgetn(char *s, std::streamsize n) {
+std::streamsize SSLBuffer::xsgetn(char *s, std::streamsize n) {
     return socket->read(s, n);
 }
