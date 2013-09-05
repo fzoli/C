@@ -146,7 +146,6 @@ int SSLSocket::tcpConnect(const char *addr, uint16_t port) {
         if (connect(handle, (struct sockaddr *) &server, sizeof (struct sockaddr)) == -1) {
             throw SocketException ( "Could not connect to the server." );
         }
-//        setNonBlocking(handle, false);
     }
     return handle;
 }
