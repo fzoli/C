@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/CertificateException.o \
+	${OBJECTDIR}/FileUtils.o \
 	${OBJECTDIR}/SSLBuffer.o \
 	${OBJECTDIR}/SSLServerSocket.o \
 	${OBJECTDIR}/SSLSocket.o \
@@ -73,6 +74,11 @@ ${OBJECTDIR}/CertificateException.o: CertificateException.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/CertificateException.o CertificateException.cpp
+
+${OBJECTDIR}/FileUtils.o: FileUtils.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/FileUtils.o FileUtils.cpp
 
 ${OBJECTDIR}/SSLBuffer.o: SSLBuffer.cpp 
 	${MKDIR} -p ${OBJECTDIR}

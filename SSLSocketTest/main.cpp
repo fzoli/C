@@ -10,23 +10,14 @@
 #include "SSLServerSocket.h"
 #include "CertificateException.h"
 #include "SSLBuffer.h"
+#include "FileUtils.h"
 
 #define PORT 9443
 
 using namespace std;
+using namespace FileUtils;
 
 int waitServer = 1;
-
-string path(string filename) {
-    char buff[1024];
-    ssize_t len = ::readlink("/proc/self/exe", buff, sizeof(buff) - 1);
-    if (len != -1) {
-        buff[len] = '\0';
-        string s(buff);
-        return s.substr(0, s.find_last_of("/") + 1).append(filename);
-    }
-    throw "path error";
-}
 
 void* server(void*) {
     string CAfile = path("ca.crt");
@@ -58,7 +49,7 @@ void* server(void*) {
         cerr << "Socket Server exception: " + ex.msg() + "\n";
         waitServer = -1;
     }
-    return NULL;
+    pthread_exit(NULL);
 }
 
 void* client(void*) {
@@ -91,7 +82,7 @@ void* client(void*) {
     catch (SocketException ex) {
         cerr << "Socket exception: " + ex.msg() + "\n";
     }
-    return NULL;
+    pthread_exit(NULL);
 }
 
 /*
