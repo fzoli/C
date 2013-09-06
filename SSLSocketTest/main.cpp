@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <unistd.h>
 
 #include "SSLServerSocket.h"
 #include "CertificateException.h"

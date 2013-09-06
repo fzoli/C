@@ -8,6 +8,8 @@
 #include "ServerSocket.h"
 #include "SocketException.h"
 
+#include <unistd.h>
+
 ServerSocket::ServerSocket() {
     ;
 }

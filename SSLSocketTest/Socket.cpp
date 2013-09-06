@@ -9,6 +9,7 @@
 #include "SocketException.h"
 #include "SocketBuffer.h"
 
+#include <unistd.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <string.h>
