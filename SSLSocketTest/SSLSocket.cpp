@@ -6,23 +6,21 @@
  */
 
 #include "SSLSocket.h"
-#include "SSLBuffer.h"
+#include "SocketBuffer.h"
 #include "CertificateException.h"
 
 #include <netdb.h>
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sstream>
 #include <openssl/err.h>
 #include <iostream>
 
 int SSLSocket::count = 0;
 pthread_mutex_t SSLSocket::mutexCount = PTHREAD_MUTEX_INITIALIZER;
 
-SSLSocket::SSLSocket() : closed(false) {
+SSLSocket::SSLSocket() {
     loadSSL();
-    buffer = NULL;
     clientName = NULL;
     serverName = NULL;
 }
@@ -31,27 +29,24 @@ SSLSocket::~SSLSocket() {
     unloadSSL();
 }
 
-SSLSocket::SSLSocket(connection c) : closed(false) {
+SSLSocket::SSLSocket(connection c) {
     loadSSL();
     ctx = NULL;
+    m_sock = c.socket;
     conn.socket = c.socket;
     conn.sslHandle = c.sslHandle;
-    buffer = new SSLBuffer(this);
+    buffer = new SocketBuffer(this);
     clientName = getCommonName(SSL_get_peer_certificate(conn.sslHandle));
     serverName = getCommonName(SSL_get_certificate(conn.sslHandle));
 }
 
-SSLSocket::SSLSocket(const char *host, uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) : closed(false) {
+SSLSocket::SSLSocket(const char *host, uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd, int timeout, bool verify) {
     loadSSL();
-    ctx = sslCreateCtx(true, CAfile, CRTfile, KEYfile, passwd);
-    sslConnect(host, port);
-    buffer = new SSLBuffer(this);
+    ctx = sslCreateCtx(true, verify, CAfile, CRTfile, KEYfile, passwd);
+    m_sock = sslConnect(host, port, timeout);
+    buffer = new SocketBuffer(this);
     clientName = getCommonName(SSL_get_certificate(conn.sslHandle));
     serverName = getCommonName(SSL_get_peer_certificate(conn.sslHandle));
-}
-
-std::streambuf* SSLSocket::getBuffer() {
-    return buffer;
 }
 
 char* SSLSocket::getClientName() {
@@ -60,10 +55,6 @@ char* SSLSocket::getClientName() {
 
 char* SSLSocket::getServerName() {
     return serverName;
-}
-
-bool SSLSocket::isClosed() {
-    return closed;
 }
 
 void SSLSocket::loadSSL() {
@@ -86,7 +77,7 @@ void SSLSocket::unloadSSL() {
     pthread_mutex_unlock(&mutexCount);
 }
 
-SSL_CTX *SSLSocket::sslCreateCtx(bool client, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) {
+SSL_CTX *SSLSocket::sslCreateCtx(bool client, bool verify, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd) {
     SSL_CTX *sctx = SSL_CTX_new(client ? SSLv23_client_method() : SSLv23_server_method());
     if (sctx == NULL) {
         throw SSLSocketException ( "Could not create SSL context." );
@@ -96,7 +87,7 @@ SSL_CTX *SSLSocket::sslCreateCtx(bool client, const char *CAfile, const char *CR
         SSL_CTX_set_options(sctx, SSL_OP_SINGLE_DH_USE);
 
         // The verification contextof certificates is activated
-        SSL_CTX_set_verify(sctx, SSL_VERIFY_PEER, NULL);
+        if (verify) SSL_CTX_set_verify(sctx, SSL_VERIFY_PEER, NULL);
 
         // Sets the password of the private key
         SSL_CTX_set_default_passwd_cb_userdata(sctx, passwd);
@@ -131,29 +122,10 @@ void SSLSocket::sslDisconnect(connection c) {
     }
 }
 
-int SSLSocket::tcpConnect(const char *addr, uint16_t port) {
-    struct hostent *host = gethostbyname(addr);
-    int handle = socket(AF_INET, SOCK_STREAM, 0);
-    if (handle == -1) {
-        throw SocketException ( "Could not create socket." );
-    }
-    else {
-        struct sockaddr_in server;
-        server.sin_family = AF_INET;
-        server.sin_port = htons(port);
-        server.sin_addr = *((struct in_addr *) host->h_addr);
-        bzero(&(server.sin_zero), 8);
-        if (connect(handle, (struct sockaddr *) &server, sizeof (struct sockaddr)) == -1) {
-            throw SocketException ( "Could not connect to the server." );
-        }
-    }
-    return handle;
-}
-
 // Establish a connection using an SSL layer
-void SSLSocket::sslConnect(const char *addr, uint16_t port) {
+int SSLSocket::sslConnect(const char *addr, uint16_t port, int timeout) {
     conn.sslHandle = NULL;
-    conn.socket = tcpConnect(addr, port);
+    conn.socket = tcpConnect(addr, port, timeout);
     
     // Create an SSL struct for the connection
     conn.sslHandle = SSL_new(ctx);
@@ -167,10 +139,12 @@ void SSLSocket::sslConnect(const char *addr, uint16_t port) {
     // Initiate SSL handshake
     if (SSL_connect(conn.sslHandle) != 1)
         throw SSLSocketException ( "Error during SSL handshake." );
+    
+    return conn.socket;
 }
 
 char *SSLSocket::getCommonName(X509 *cert) {
-    if (cert == NULL) throw CertificateException( "Certificate is NULL." );
+    if (cert == NULL) return NULL;
     X509_NAME *subjectName;
     char  *subjectCn = new char[256];
     subjectName = X509_get_subject_name(cert);
@@ -187,55 +161,12 @@ void SSLSocket::close() {
 
 int SSLSocket::write(const void *buf, int num) const {
     int status = SSL_write(conn.sslHandle, buf, num);
-    if (status <= 0)
-        throw SSLSocketException( "Could not write byte" );
+    if (status <= 0) throw SSLSocketException( "Could not write byte" );
     return status;
-}
-
-int SSLSocket::write(const char *text) const {
-    return write(text, strlen(text));
-}
-
-void SSLSocket::write(int byte) {
-    if (byte < 0 || byte > 255) throw SocketException( "Byte out of range" );
-    char unsigned byte_char = byte;
-    write(&byte_char, 1);
-}
-
-int SSLSocket::read() {
-    char buf[1];
-    int status = read(&buf, 1);
-    return status == 0 ? -1 : buf[0];
 }
 
 int SSLSocket::read(void *buf, int num) const {
     int status = SSL_read(conn.sslHandle, buf, num);
-    if (status < 0) throw SocketException ( "Could not read from socket." );
+    if (status < 0) throw SSLSocketException ( "Could not read from socket." );
     return status;
-}
-
-void SSLSocket::read(std::string& s) const {
-    int status, bufsize = 1000;
-    char buf[bufsize + 1];
-    memset(buf, 0, bufsize + 1);
-    s = "";
-    
-    std::ostringstream ss;
-    do {
-        status = read(buf, bufsize);
-        ss.write(buf, status);
-    } while (status > 0);
-    
-    s = ss.str().c_str();
-    ss.clear();
-}
-
-const SSLSocket& SSLSocket::operator >> (std::string& s) const {
-    read(s);
-    return *this;
-}
-
-const SSLSocket& SSLSocket::operator << (const std::string& s) const {
-    write(s.c_str());
-    return *this;
 }

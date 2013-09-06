@@ -12,11 +12,9 @@
 
 #include <pthread.h>
 
-#include <stdint.h>
+#include "Socket.h"
 
-#include <string>
-
-class SSLSocket {
+class SSLSocket : public Socket {
     
     protected:
         
@@ -28,28 +26,21 @@ class SSLSocket {
     public:
         
         SSLSocket(connection c);
-        SSLSocket(const char *host, uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
+        SSLSocket(const char *host, uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd, int timeout = 0, bool verify = true);
         virtual ~SSLSocket();
         
-        std::streambuf* getBuffer();
         char* getClientName();
         char* getServerName();
-        bool isClosed();
-        virtual void close();
-        void write(int byte);
-        int write(const char *text) const;
+        void close();
         int write(const void *buf, int num) const;
-        int read();
         int read(void *buf, int num) const;
-        void read (std::string& s) const;
         
-        const SSLSocket& operator >> (std::string& s) const;
-        const SSLSocket& operator << (const std::string& s) const;
+        using Socket::write;
+        using Socket::read;
         
     private:
         
         connection conn;
-        std::streambuf* buffer;
         char *clientName, *serverName;
         static int count;
         static pthread_mutex_t mutexCount;
@@ -57,18 +48,16 @@ class SSLSocket {
         static void loadSSL();
         static void unloadSSL();
         static char *getCommonName(X509 *cert);
-        static int tcpConnect(const char *addr, uint16_t port);
-        void sslConnect(const char *addr, uint16_t port);
+        int sslConnect(const char *addr, uint16_t port, int timeout);
         static void sslDisconnect(connection c);
         
     protected:
         
-        bool closed;
         SSL_CTX* ctx;
         
         SSLSocket();
         
-        static SSL_CTX *sslCreateCtx(bool client, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
+        static SSL_CTX *sslCreateCtx(bool client, bool verify, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
         static void sslDestroyCtx(SSL_CTX *sctx);
         
 };

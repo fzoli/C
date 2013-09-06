@@ -9,33 +9,24 @@
 #define	SSLSERVERSOCKET_H
 
 #include "SSLSocket.h"
+#include "ServerSocket.h"
 
-#include <netinet/in.h>
-
-class SSLServerSocket : private SSLSocket {
-    
-    struct handles {
-        int socket;
-        struct sockaddr_in server;
-        int serverlen;
-    };
+class SSLServerSocket : private SSLSocket, private ServerSocket {
     
     public:
         
-        SSLServerSocket(uint16_t port, uint16_t maxNewConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
-        SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
-        SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile);
+        SSLServerSocket(uint16_t port, uint16_t maxNewConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd, bool verify = true);
+        SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd, bool verify = true);
+        SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, bool verify = true);
         
         SSLSocket accept();
         void close();
+        bool isClosed();
+        void setTimeout(int sec);
         
     private:
         
-        handles h;
-        
-        void init(uint16_t port, uint16_t maxNewConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
-        void open(uint16_t port, uint16_t maxConn);
-        int tcpAccept();
+        void init(uint16_t port, uint16_t maxNewConn, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd, bool verify = true);
         connection sslAccept();
         
 };

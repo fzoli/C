@@ -9,29 +9,31 @@
 #define	SSLSTREAM_H
 
 #include <streambuf>
+#include <libio.h>
 
-#include "SSLSocket.h"
+#include "Socket.h"
 
-struct sslstream_data;
+struct sb_data;
 
-class SSLBuffer : public std::streambuf {
+class SocketBuffer : public std::streambuf {
     
     public:
         
-        explicit SSLBuffer(SSLSocket* socket);
-        virtual ~SSLBuffer();
+        explicit SocketBuffer(Socket* socket);
+        virtual ~SocketBuffer();
         
     protected:
         
         virtual int underflow();
-        virtual int overflow(int c = -1);
+        virtual int overflow(int c = EOF);
         virtual std::streamsize xsputn(const char *s, std::streamsize n);
         virtual std::streamsize xsgetn(char *s, std::streamsize n);
         
     private:
         
-        SSLSocket* socket;
-        sslstream_data * m_data;
+        Socket* socket;
+        sb_data * m_data;
+        bool fillbuffer();
         
 };
 

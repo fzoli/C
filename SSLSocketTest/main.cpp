@@ -9,7 +9,7 @@
 
 #include "SSLServerSocket.h"
 #include "CertificateException.h"
-#include "SSLBuffer.h"
+#include "SocketBuffer.h"
 #include "FileUtils.h"
 
 #define PORT 9443
@@ -25,14 +25,19 @@ void* server(void*) {
     string KEYfile = path("server.key");
     char *KEYpass = (char *) "asdfgh";
     try {
+//        ServerSocket s(PORT);
         SSLServerSocket s(PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
+        s.setTimeout(1);
         waitServer = 0;
+        
+//        Socket c = s.accept();
         SSLSocket c = s.accept();
         
         c << "Hello" << " ";
-        
         ostream os(c.getBuffer());
         os << "World!";
+        
+//        c.read();
         
         c.close();
         s.close();
@@ -58,13 +63,17 @@ void* client(void*) {
     string KEYfile = path("client.key");
     char *KEYpass = (char *) "asdfgh";
     try {
-        SSLSocket c("localhost", PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass);
-        istream is(c.getBuffer());
+//        Socket c("localhost", PORT, 1);
+        SSLSocket c("localhost", PORT, CAfile.c_str(), CRTfile.c_str(), KEYfile.c_str(), KEYpass, 1);
+        c.setTimeout(1);
         
+//        c.write(1);
+        
+        istream is(c.getBuffer());
         while (!c.isClosed()) {
             string line;
             std::getline(is, line);
-            cout << line + "\n";
+            if (!line.empty()) cout << line + "\n";
         }
         
 //        string reply;
