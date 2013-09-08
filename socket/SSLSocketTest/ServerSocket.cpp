@@ -18,9 +18,8 @@ ServerSocket::ServerSocket(uint16_t port, uint16_t maxNewConn) {
     open(port, maxNewConn);
 }
 
-Socket ServerSocket::accept() {
-    Socket s(tcpAccept());
-    return s;
+Socket* ServerSocket::accept() {
+    return new Socket(tcpAccept());
 }
 
 bool ServerSocket::isClosed() {
@@ -71,6 +70,6 @@ int ServerSocket::tcpAccept() {
 }
 
 void ServerSocket::setTimeout(int sec) {
-//    Socket::setTimeout(h.socket, sec); // do not need
+//    Socket::setTimeout(h.socket, sec); // do not need because has no effect
     timeout = sec;
 }

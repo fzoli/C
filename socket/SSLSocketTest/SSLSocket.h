@@ -49,7 +49,6 @@ class SSLSocket : public Socket {
         static void unloadSSL();
         static char *getCommonName(X509 *cert);
         int sslConnect(const char *addr, uint16_t port, int timeout);
-        static void sslDisconnect(connection c);
         
     protected:
         
@@ -59,6 +58,7 @@ class SSLSocket : public Socket {
         
         static SSL_CTX *sslCreateCtx(bool client, bool verify, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd);
         static void sslDestroyCtx(SSL_CTX *sctx);
+        static void sslDisconnect(connection c);
         
 };
 

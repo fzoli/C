@@ -31,27 +31,26 @@ void* server(void*) {
         s.setTimeout(1);
         waitServer = 0;
         
-//        Socket c = s.accept();
-        SSLSocket c = s.accept();
+        Socket* c = s.accept();
         
-        c << "Hello" << " ";
-        ostream os(c.getBuffer());
-        os << "World!";
+        ostream os(c->getBuffer());
+        os << "Hello" << " " << "World!";
         
-//        c.read();
+//        c->read();
         
-        c.close();
+        c->close();
         s.close();
+        delete c;
     }
-    catch (CertificateException ex) {
+    catch (CertificateException &ex) {
         cerr << "Certificate exception: " + ex.msg() + "\n";
         waitServer = -1;
     }
-    catch (SSLSocketException ex) {
+    catch (SSLSocketException &ex) {
         cerr << "SSL Server Socket exception: " + ex.msg() + "\n";
         waitServer = -1;
     }
-    catch (SocketException ex) {
+    catch (SocketException &ex) {
         cerr << "Socket Server exception: " + ex.msg() + "\n";
         waitServer = -1;
     }
@@ -71,7 +70,7 @@ void* client(void*) {
 //        c.write(1);
         
         istream is(c.getBuffer());
-        while (!c.isClosed()) {
+        while (is.good() && !c.isClosed()) {
             string line;
             std::getline(is, line);
             if (!line.empty()) cout << line + "\n";
@@ -83,13 +82,13 @@ void* client(void*) {
         
         c.close();
     }
-    catch (CertificateException ex) {
+    catch (CertificateException &ex) {
         cerr << "Certificate exception: " + ex.msg() + "\n";
     }
-    catch (SSLSocketException ex) {
+    catch (SSLSocketException &ex) {
         cerr << "SSL Socket exception: " + ex.msg() + "\n";
     }
-    catch (SocketException ex) {
+    catch (SocketException &ex) {
         cerr << "Socket exception: " + ex.msg() + "\n";
     }
     pthread_exit(NULL);
@@ -99,8 +98,8 @@ void* client(void*) {
  * 
  */
 int main(int argc, char** argv) {
-    pthread_t serverThread;
-    if (pthread_create(&serverThread, NULL, &server, NULL)) {
+    pthread_t threads;
+    if (pthread_create(&threads, NULL, &server, NULL)) {
         cerr << "Server thread could not be created.";
         return EXIT_FAILURE;
     }
@@ -110,17 +109,12 @@ int main(int argc, char** argv) {
     if (waitServer == -1) {
         return EXIT_FAILURE;
     }
-    pthread_t clientThread;
-    if (pthread_create(&clientThread, NULL, &client, NULL)) {
+    if (pthread_create(&threads, NULL, &client, NULL)) {
         cerr << "Client thread could not be created.\n";
         return EXIT_FAILURE;
     }
-    if (pthread_join(serverThread, NULL)) {
-        cerr << "Could not join server thread.\n";
-        return EXIT_FAILURE;
-    }
-    if (pthread_join(clientThread, NULL)) {
-        cerr << "Could not join client thread.\n";
+    if (pthread_join(threads, NULL)) {
+        cerr << "Could not join threads.\n";
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;

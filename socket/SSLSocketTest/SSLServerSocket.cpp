@@ -45,24 +45,30 @@ SSLSocket::connection SSLServerSocket::sslAccept() {
     
     // Create an SSL struct for the connection
     c.sslHandle = SSL_new(ctx);
-    if (c.sslHandle == NULL)
+    if (c.sslHandle == NULL) {
+        sslDisconnect(c);
         throw SSLSocketException ( "Could not create SSL object." );
-
+    }
+    
     // Connect the SSL struct to our connection
-    if (!SSL_set_fd(c.sslHandle, c.socket))
+    if (!SSL_set_fd(c.sslHandle, c.socket)) {
+        sslDisconnect(c);
         throw SSLSocketException ( "Could not connect the SSL object to the socket." );
+    }
     
     // Initiate SSL handshake
-    if (SSL_accept(c.sslHandle) != 1)
+    if (SSL_accept(c.sslHandle) != 1) {
+        sslDisconnect(c);
+        // TODO: ERR_print_errors_fp(stderr) -> 4091:error:140D9115:SSL routines:SSL_GET_PREV_SESSION:session id context uninitialized:ssl_sess.c:413:
         throw SSLSocketException ( "Error during SSL handshake." );
-        
+    }
+    
     return c;
 }
 
-SSLSocket SSLServerSocket::accept() {
+SSLSocket* SSLServerSocket::accept() {
     connection c = sslAccept();
-    SSLSocket s = SSLSocket(c);
-    return s;
+    return new SSLSocket(c);
 }
 
 void SSLServerSocket::setTimeout(int sec) {

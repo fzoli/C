@@ -19,7 +19,7 @@ class SSLServerSocket : private SSLSocket, private ServerSocket {
         SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, void *passwd, bool verify = true);
         SSLServerSocket(uint16_t port, const char *CAfile, const char *CRTfile, const char *KEYfile, bool verify = true);
         
-        SSLSocket accept();
+        SSLSocket* accept();
         void close();
         bool isClosed();
         void setTimeout(int sec);

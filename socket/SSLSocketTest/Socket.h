@@ -15,9 +15,9 @@ class Socket {
     
     public:
         
-        Socket(const char *host, uint16_t port, int timeout = 0);
-        
         Socket(int sock);
+        virtual ~Socket();
+        Socket(const char *host, uint16_t port, int timeout = 0);
         
         bool isClosed();
         std::streambuf* getBuffer();

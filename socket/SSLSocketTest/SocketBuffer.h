@@ -8,10 +8,13 @@
 #ifndef SSLSTREAM_H
 #define	SSLSTREAM_H
 
-#include <streambuf>
-#include <libio.h>
+#ifndef EOF
+# define EOF (-1)
+#endif
 
 #include "Socket.h"
+
+#include <streambuf>
 
 struct sb_data;
 

@@ -11,7 +11,11 @@
 #include <string>
 
 namespace FileUtils {
+    
     std::string path(std::string filename);
+    
+    bool fexists(std::string filename);
+    
 }
 
 #endif	/* FILEUTIL_H */

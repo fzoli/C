@@ -8,6 +8,7 @@
 #include "FileUtils.h"
 
 #include <unistd.h>
+#include <fstream>
 
 std::string FileUtils::path(std::string filename) {
     if (filename.at(0) == '/') {
@@ -21,4 +22,10 @@ std::string FileUtils::path(std::string filename) {
         return s.substr(0, s.find_last_of("/") + 1).append(filename);
     }
     throw "path error";
+}
+
+bool FileUtils::fexists(std::string filename) {
+    if (filename.empty()) return false;
+    std::ifstream ifile(filename.c_str());
+    return ifile;
 }

@@ -20,6 +20,10 @@ Socket::Socket() : closed(false) {
     m_sock = 0;
 }
 
+Socket::~Socket() {
+    if (buffer != NULL) delete buffer;
+}
+
 Socket::Socket(int sock) : closed(false) {
     buffer = new SocketBuffer(this);
     m_sock = sock;
@@ -85,10 +89,6 @@ void Socket::read(std::string& s) const {
     
     s = ss.str().c_str();
     ss.clear();
-    
-//    Socket* sock = const_cast<Socket*>(this);
-//    std::istream is(sock->getBuffer());
-//    std::getline(is, s);
 }
 
 int Socket::tcpConnect(const char *addr, uint16_t port, int timeout) {
@@ -148,39 +148,3 @@ const Socket& Socket::operator << (const std::string& s) const {
     write(s.c_str());
     return *this;
 }
-
-//static int check_socket_and_wait_for_timeout (int sock_fd, int time, int writing) // 0 - read; 1 - write, 2 - connect
-//{
-//fd_set rset, wset;
-//struct timeval tv = {time, 0};
-//int rc;
-//
-///* Guard against closed socket */
-//if (sock_fd < 0)
-//return -1; /* closed */
-//
-///* Construct the arguments to select */
-//FD_ZERO(&rset);
-//FD_SET(sock_fd, &rset);
-//wset = rset;
-//
-///* See if the socket is ready */
-//switch (writing)
-//{
-//case 0:
-//rc = select(sock_fd+1, &rset, NULL, NULL, &tv);
-//break;
-//case 1:
-//rc = select(sock_fd+1, NULL, &wset, NULL, &tv);
-//break;
-//case 2:
-//rc = select(sock_fd+1, &rset, &wset, NULL, &tv);
-//break;
-//}
-//
-///* Return SOCKET_TIMED_OUT on timeout, SOCKET_OPERATION_OK
-//otherwise
-//(when we are able to write or when there's something to
-//read) */
-//return rc == 0 ? 1/*timeout*/ : 0 /*ok*/;
-//}

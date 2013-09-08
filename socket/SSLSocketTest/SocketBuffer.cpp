@@ -58,7 +58,7 @@ bool SocketBuffer::fillbuffer() {
     try {
         num = socket->read(m_data->buffer, BUFFER_SIZE);
     }
-    catch (SocketException ex) {
+    catch (SocketException &ex) {
         num = -1;
     }
     
@@ -106,7 +106,7 @@ int SocketBuffer::overflow(int c) {
     try {
         return socket->write(&c, sizeof(c));
     }
-    catch (SocketException ex) {
+    catch (SocketException &ex) {
         socket->close();
         return -1;
     }
@@ -116,7 +116,7 @@ std::streamsize SocketBuffer::xsputn(const char *s, std::streamsize n) {
     try {
         return socket->write(s, n);
     }
-    catch (SocketException ex) {
+    catch (SocketException &ex) {
         socket->close();
         return -1;
     }
@@ -126,7 +126,7 @@ std::streamsize SocketBuffer::xsgetn(char *s, std::streamsize n) {
     try {
         return socket->read(s, n);
     }
-    catch (SocketException ex) {
+    catch (SocketException &ex) {
         socket->close();
         return -1;
     }

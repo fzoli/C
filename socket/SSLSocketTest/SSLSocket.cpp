@@ -26,7 +26,9 @@ SSLSocket::SSLSocket() {
 }
 
 SSLSocket::~SSLSocket() {
-    unloadSSL();
+    if (clientName != NULL) delete [] clientName;
+    if (serverName != NULL) delete [] serverName;
+    unloadSSL(); // TODO: segfault több szál esetén
 }
 
 SSLSocket::SSLSocket(connection c) {
@@ -92,6 +94,11 @@ SSL_CTX *SSLSocket::sslCreateCtx(bool client, bool verify, const char *CAfile, c
         // Sets the password of the private key
         SSL_CTX_set_default_passwd_cb_userdata(sctx, passwd);
 
+        if (!client) {
+            int s_server_session_id_context = 1;
+            SSL_CTX_set_session_id_context(sctx, (const unsigned char*) &s_server_session_id_context, sizeof(s_server_session_id_context));
+        }
+        
         if (SSL_CTX_load_verify_locations(sctx, CAfile, NULL) == 0) {
             throw CertificateException ( "CA file could not be loaded." );
         }
@@ -110,13 +117,13 @@ SSL_CTX *SSLSocket::sslCreateCtx(bool client, bool verify, const char *CAfile, c
 }
 
 void SSLSocket::sslDestroyCtx(SSL_CTX *sctx) {
-    if (sctx) SSL_CTX_free(sctx);
+    if (sctx != NULL && sctx) SSL_CTX_free(sctx);
 }
 
 void SSLSocket::sslDisconnect(connection c) {
     if (c.socket)
         ::close(c.socket);
-    if (c.sslHandle) {
+    if (c.sslHandle != NULL && c.sslHandle) {
         SSL_shutdown(c.sslHandle);
         SSL_free(c.sslHandle);
     }
@@ -129,17 +136,20 @@ int SSLSocket::sslConnect(const char *addr, uint16_t port, int timeout) {
     
     // Create an SSL struct for the connection
     conn.sslHandle = SSL_new(ctx);
-    if (conn.sslHandle == NULL)
+    if (conn.sslHandle == NULL) {
+        close();
         throw SSLSocketException ( "Could not create SSL object." );
-    
+    }
     // Connect the SSL struct to our connection
-    if (!SSL_set_fd(conn.sslHandle, conn.socket))
+    if (!SSL_set_fd(conn.sslHandle, conn.socket)) {
+        close();
         throw SSLSocketException ( "Could not connect the SSL object to the socket." );
-
+    }
     // Initiate SSL handshake
-    if (SSL_connect(conn.sslHandle) != 1)
+    if (SSL_connect(conn.sslHandle) != 1) {
+        close();
         throw SSLSocketException ( "Error during SSL handshake." );
-    
+    }
     return conn.socket;
 }
 
@@ -149,6 +159,7 @@ char *SSLSocket::getCommonName(X509 *cert) {
     char  *subjectCn = new char[256];
     subjectName = X509_get_subject_name(cert);
     if (X509_NAME_get_text_by_NID(subjectName, NID_commonName, subjectCn, 256) != -1) return subjectCn;
+    delete [] subjectCn;
     throw CertificateException( "Could not get common name." );
 }
 
